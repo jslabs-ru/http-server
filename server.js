@@ -3,6 +3,15 @@ const router = require('find-my-way')();
 
 const PORT = 3021;
 
+const knex = require('knex')({
+    client: 'sqlite3',
+    connection: {
+        filename: './data.db',
+    },
+});
+
+console.log('knex...', knex);
+
 router.on('GET', '/', (request, response) => {
     response.setHeader('Content-Type', 'text/plain');
     response.end('Main page');
