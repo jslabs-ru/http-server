@@ -1,5 +1,5 @@
 ## Instalation
 ```npm install```
 
-## Watch changes and restart server
+## Start server
 ```npm start```
