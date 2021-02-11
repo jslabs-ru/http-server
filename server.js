@@ -2,6 +2,7 @@ const http = require('http');
 const router = require('find-my-way')();
 
 const PORT = 3021;
+const USERS = 'users';
 
 const knex = require('knex')({
     client: 'sqlite3',
@@ -16,23 +17,17 @@ const knex = require('knex')({
         response.end('Main page');
     })
 
-    router.on('GET', '/api/v1/users', (request, response, params) => {
+    router.on('GET', '/api/v1/users', async (request, response, params) => {
+        const users = await knex(USERS);
         response.setHeader('Content-Type', 'application/json');
-        response.write(JSON.stringify([
-            'Alice',
-            'Robert',
-            'John',
-            'Lucy',
-            'Michael'
-        ]));
+        response.write(JSON.stringify(users));
         response.end();
     })
 
     router.on('GET', '/api/v1/users/:id', async (request, response, params) => {
         const { id } = params;
-        console.log('ID', id);
 
-        var user = await knex('users').where('id', id);
+        var user = await knex(USERS).where('id', id);
 
         response.setHeader('Content-Type', 'application/json');
         response.write(JSON.stringify(user));
