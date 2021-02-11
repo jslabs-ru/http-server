@@ -4,7 +4,8 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "nodemon ./server"
+    "start": "nodemon ./server",
+    "populate": "node ./scripts/populate"
   },
   "keywords": [],
   "author": "",
@@ -12,7 +13,9 @@
   "dependencies": {
     "find-my-way": "^4.0.0",
     "knex": "^0.21.17",
-    "sqlite3": "^5.0.1"
+    "password-generator": "^2.3.2",
+    "sqlite3": "^5.0.1",
+    "when": "^3.7.8"
   },
   "devDependencies": {
     "nodemon": "^2.0.7"
