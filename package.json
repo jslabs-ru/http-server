@@ -10,5 +10,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "find-my-way": "^4.0.0"
   }
 }
