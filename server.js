@@ -4,10 +4,19 @@ const router = require('find-my-way')();
 const PORT = 3021;
 
 router.on('GET', '/', (request, response) => {
+    response.setHeader('Content-Type', 'text/plain');
+    response.end('Main page');
+})
+
+router.on('GET', '/api/v1/users', (request, response) => {
     response.setHeader('Content-Type', 'application/json');
-    response.write(JSON.stringify({
-        ok: 1
-    }));
+    response.write(JSON.stringify([
+        'Alice',
+        'Robert',
+        'John',
+        'Lucy',
+        'Michael'
+    ]));
     response.end();
 })
 
