@@ -1,6 +1,6 @@
 const knex = require('knex')
 const http = require('http');
-const router = require('find-my-way')();
+const findMyWay = require('find-my-way');
 
 const PORT = 3021;
 const USERS = 'users';
@@ -17,6 +17,18 @@ async function assertDatabaseConnection(database) {
 async function startServer(db) {
     await assertDatabaseConnection(db);
 
+    const router = findMyWay({
+        onBadUrl: (path, request, response) => {
+            response.statusCode = 400;
+            response.end(`Bad path: ${path}`);
+        },
+
+        defaultRoute: (request, response) => {
+            response.statusCode = 404;
+            response.end('Not found');
+        }
+    })
+
     router.on('GET', '/', (request, response) => {
         response.setHeader('Content-Type', 'text/plain');
         response.end('Main page');
@@ -31,17 +43,19 @@ async function startServer(db) {
 
     router.on('GET', '/api/v1/users/:id', async (request, response, params) => {
         const { id } = params;
-
-        var user = await db(USERS).where('id', id);
+        const users = await db(USERS).where('id', id);
 
         response.setHeader('Content-Type', 'application/json');
-        response.write(JSON.stringify(user));
-        response.end();
-    })
-
-    router.on('GET', '*', (request, response) => {
-        response.setHeader('Content-Type', 'text/plain');
-        response.end('Not found');
+        if(users.length) {
+            response.write(JSON.stringify(users[0]));
+            response.end();
+        } else {
+            response.statusCode = 404;
+            response.write(JSON.stringify({
+                error: 'Not found'
+            }));
+            response.end();
+        }
     })
 
     const server = http.createServer((request, response) => {
